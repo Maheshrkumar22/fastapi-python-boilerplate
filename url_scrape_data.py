@@ -199,7 +199,7 @@ def scrape_data(source_url):
                                 'leaders','about','cloud','demo','pricing','login','free','promise','entertain',\
                                 'enthusiasm','products','platform','resource','education','health','store','government','values',\
                                 'analysis','source','explore','apply','student','politics','software','microsoft','awards','grow','purpose','fact','policy','studies','business','corporate','speed',\
-                                'life','work','services','community','generative','overview','brand','data','engineer',\
+                                'life','work','services','hire','community','generative','overview','brand','data','engineer',\
                                 'consult','read','compan','join','cpg','results','logged','vision','preference','relation',\
                                 'analyst','security','tech','service','intelligen','individual','learn',\
                                 'partner','ecosy','social','search','compan','equity','customer','director']
