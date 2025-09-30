@@ -1,28 +1,32 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Ffastapi&demo-title=FastAPI&demo-description=Use%20FastAPI%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-fastapi.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
 
-# FastAPI + Vercel
+# 🌐 Leadership Profile Scraper
 
-This example shows how to use FastAPI on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+A full-stack web application designed to scrape and display the leadership team profiles (Name, Designation, and Image) from any public corporate "About Us" or "Leadership" webpage.
 
-## Demo
+This project uses a high-performance FastAPI backend for web scraping and a simple, dynamic HTML/CSS/JavaScript frontend to visualize the results.
+## ✨ Features
 
-https://vercel-plus-fastapi.vercel.app/
+    URL-Agnostic Scraping: Accepts any corporate URL (e.g., Walmart, Mahindra, Google Cloud).
 
-## How it Works
+    Dual Scraping Methods: Attempts initial request scraping (requests) and falls back to JavaScript rendering (requests-html with Pyppeteer) if dynamic content is detected.
 
-This example uses the Asynchronous Server Gateway Interface (ASGI) with FastAPI to enable handling requests on Vercel with Serverless Functions.
+    Intelligent Extraction: Uses heuristics, keyword matching (e.g., 'CEO', 'President', 'Officer'), and image URL pattern matching to reliably extract profile data.
 
-## Running Locally
+    FastAPI Backend: Provides a robust, asynchronous API endpoint for the front-end application.
 
-```bash
-npm i -g vercel
-vercel dev
-```
+    CORS Enabled: Configured for cross-origin resource sharing for easy local development.
 
-Your FastAPI application is now available at `http://localhost:3000`.
+## 🛠️ Tech Stack
+### Backend (Python)
 
-## One-Click Deploy
+    Framework: FastAPI (ASGI)
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+    Scraping: requests-html, BeautifulSoup4, lxml
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Ffastapi&demo-title=FastAPI&demo-description=Use%20FastAPI%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-fastapi.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+    Data Processing: pandas, numpy
+
+### Frontend (Web)
+
+    Language: JavaScript (ES6+), HTML5, CSS
+
+    Interaction: Fetch API for asynchronous communication with the backend.
