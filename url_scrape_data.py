@@ -83,8 +83,12 @@ def scrape_data(source_url):
 
     if(soup.find_all(["a","p","h1","h2","h3","h4","h5"])==[]):
     # Run the async function
-        soup,status_code = asyncio.run( scrape_page(source_url))
-        #soup,status_code = await scrape_page_dynamic(url)          # await instead of asyncio.run
+        #soup,status_code = asyncio.run( scrape_page(source_url))
+
+
+        loop = asyncio.get_event_loop()
+
+        soup,status_code = loop.run_until_complete(scrape_page_dynamic(url))        # await instead of asyncio.run
         
         if(status_code!= 200):
             data = [{
