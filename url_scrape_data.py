@@ -252,7 +252,9 @@ def scrape_data(source_url):
                              'life','work','services','community','generative','overview','brand','data','engineer',\
                              'consult','read','compan','join','cpg','results','logged','vision','preference','relation',\
                              'analyst','security','tech','service','intelligen','individual','learn','message','fact','access',\
-                             'partner','ecosy','social','search','compan','equity','customer','director','purpose','gallery','item','fellow']
+                             'partner','ecosy','social','search','compan','equity','customer','director','purpose','gallery','item','fellow',\
+                            'stock','team','fund','people','who we','heritage','glance','FAQ','heritage','site map','movement',\
+                            'diabetes','testing','view','global','strength']
     name_regex_pattern = "|".join(name_remove_list_patterns) 
 
     # 2. Filter the first list using a list comprehension
