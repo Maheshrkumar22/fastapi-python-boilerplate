@@ -5,7 +5,7 @@ import asyncio
 import aiohttp
 import json,re,jsonify 
 import asyncio,itertools
-from playwright.async_api import async_playwright
+from playwright.sync_api import sync_playwright
 
 import requests
 from bs4 import BeautifulSoup
@@ -55,16 +55,25 @@ async def scrape_page(url):
 
     return soup,response.status_code
 
-async def scrape_page_dynamic(url: str):
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
-        await page.goto(url, wait_until="networkidle")
-        html = await page.content()
-        soup = BeautifulSoup(html.html, 'html.parser')
-        await browser.close()
-        return soup, html.status_code
-    
+# async def scrape_page_dynamic(url: str):
+#     async with async_playwright() as p:
+#         browser = await p.chromium.launch(headless=True)
+#         page = await browser.new_page()
+#         await page.goto(url, wait_until="networkidle")
+#         html = await page.content()
+#         soup = BeautifulSoup(html.html, 'html.parser')
+#         await browser.close()
+#         return soup, html.status_code
+
+def scrape_page_dynamic(url: str):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url, wait_until="networkidle")
+        html = page.content()
+        soup = BeautifulSoup(html, 'html.parser')
+        browser.close()
+        return soup,html.status_code
 
 def remove_multiple_chars(text, chars_to_remove):
     for char in chars_to_remove:
@@ -86,9 +95,9 @@ def scrape_data(source_url):
         #soup,status_code = asyncio.run( scrape_page(source_url))
 
 
-        loop = asyncio.get_event_loop()
+        #loop = asyncio.get_event_loop()
 
-        soup,status_code = loop.run_until_complete(scrape_page_dynamic(url))        # await instead of asyncio.run
+        soup,status_code = scrape_page_dynamic(url)       # await instead of asyncio.run
         
         if(status_code!= 200):
             data = [{
