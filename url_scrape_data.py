@@ -106,7 +106,7 @@ def scrape_data(source_url):
             "Designation":"Bot been blocked",
             "img url":None
             }]
-            return data
+            return json.dumps(data)
 
     ############# scrape and save relevant tags
     h1 = [str(x.get_text().strip()) for x in soup.find_all(['h1'])]
