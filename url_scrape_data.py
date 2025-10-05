@@ -194,11 +194,15 @@ def scrape_data(source_url):
     # Count matches per list
     results = []
     for i, lst in enumerate(lists, 1):
-        matches = [s for s in lst if name_pattern.match(s)]
+        all_persons=[]
+        for text in lst:
+            doc = nlp(text)
+            matches = [ent.text for ent in doc.ents if ent.label_ == "PERSON"]
+            all_persons.extend(matches)
         results.append({
             'list_index': i-1,
             'list_name': f'h{i}',
-            'weightage': len(matches)
+            'weightage': len(all_persons)
         })
     filtered_data = results
     print(filtered_data)
@@ -227,24 +231,27 @@ def scrape_data(source_url):
     #name_list = matches
     print(name_list)
     print('Name lists are at list: ',lists_name[max_result['list_index']],' /weightage :', max_result['weightage'])
+    title_pattern = r"^(Mr|Ms|Mrs|Dr|Professor)\.?\s+"
+
+    name_list = [re.sub(title_pattern, "", name) for name in name_list]
 
     ############### Remove the unwanted patterns -----> clean the list
 
     remove_list_patterns = ["follow", "download","logo","skip","news",'subscribe','start','terms','help','reserved',\
-                            'into the','exceptional','capabilities','model','committed','with','every'] # Patterns to match and remove
+                            'into the','exceptional','capabilities','model','committed','with','every','convert','identity','access','message'] # Patterns to match and remove
 
     regex_pattern = "|".join(remove_list_patterns) 
 
 
     name_remove_list_patterns = ["follow", "download","logo","skip","news",'contact','diversity','&','connect',\
-                                "press",'subscribe','start','digital','privacy','terms','help','wallet','account',\
-                                'leaders','about','cloud','demo','pricing','login','free','promise','entertain',\
-                                'enthusiasm','products','platform','resource','education','health','store','government','values',\
-                                'analysis','source','explore','apply','student','politics','software','microsoft','awards','grow','purpose','fact','policy','studies','business','corporate','speed',\
-                                'life','work','services','hire','community','generative','overview','brand','data','engineer',\
-                                'consult','read','compan','join','cpg','results','logged','vision','preference','relation',\
-                                'analyst','security','tech','service','intelligen','individual','learn',\
-                                'partner','ecosy','social','search','compan','equity','customer','director']
+                             "press",'subscribe','start','digital','privacy','terms','help','wallet','account',\
+                             'leaders','about','cloud','demo','pricing','login','free','promise','entertain',\
+                             'enthusiasm','products','platform','resource','education','health','store','government','values',\
+                             'analysis','source','software','microsoft','policy','studies','business','corporate','speed',\
+                             'life','work','services','community','generative','overview','brand','data','engineer',\
+                             'consult','read','compan','join','cpg','results','logged','vision','preference','relation',\
+                             'analyst','security','tech','service','intelligen','individual','learn','message','fact','access',\
+                             'partner','ecosy','social','search','compan','equity','customer','director','purpose','gallery','item','fellow']
     name_regex_pattern = "|".join(name_remove_list_patterns) 
 
     # 2. Filter the first list using a list comprehension
@@ -266,6 +273,11 @@ def scrape_data(source_url):
 
 
     # Use a function to apply all replacements to a single string
+
+    def remove_multiple_chars(text, chars_to_remove):
+        for char in chars_to_remove:
+            text = text.replace(char, ' ')
+        return text
 
 
     name_list = [remove_multiple_chars(name, unicode_chars_to_remove) for name in name_list]
@@ -294,7 +306,11 @@ def scrape_data(source_url):
         return json.dumps(data,indent=3)
 
     #############---- create new columns to clean the name and find image url
-    df[['First Name', 'Last Name']] = df['Name'].str.split(n=1, expand=True)
+    if(df['Name'].isnull().all()):
+        df[['First Name', 'Last Name']] = df['Designation'].str.split(n=1, expand=True)
+    else:
+        df[['First Name', 'Last Name']] = df['Name'].str.split(n=1, expand=True)
+
 
     # Convert the new columns to lowercase
     df['First Name'] = df['First Name'].str.lower()
@@ -316,13 +332,7 @@ def scrape_data(source_url):
         last_name = row['Last Name']
 
         # Check if the first name is present in any of the URLs
-        for url in src_list:
-            # Convert both name and URL to lowercase for case-insensitive matching
-            if first_name is not None and first_name in str(url).lower():
-                # If a match is found, assign the full URL to the new column
-                df.at[index, 'img url'] = url
-                # Break the inner loop once a match is found
-                break
+
         for url in src_list:
             # Convert both name and URL to lowercase for case-insensitive matching
             if last_name is not None and last_name in str(url).lower():
@@ -331,11 +341,21 @@ def scrape_data(source_url):
                 # Break the inner loop once a match is found
                 break
 
+        for url in src_list:
+            # Convert both name and URL to lowercase for case-insensitive matching
+            if first_name is not None and first_name in str(url).lower():
+                # If a match is found, assign the full URL to the new column
+                df.at[index, 'img url'] = url
+                # Break the inner loop once a match is found
+                break
+        
+
     ########find if url has direct link or append
 
     full_url_flag = False 
     if(((str(df['img url'][1])[:8]) or (str(df['img url'][0])[:8]) or (str(df['img url'][-1])[:8])) == 'https://'):
         full_url_flag = True
+        
     ######append stripped url if direct link is not found
     stripped_url = source_url[:source_url.find('.com') + len('.com')]
 
