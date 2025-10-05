@@ -40,7 +40,7 @@ playwright==1.55.0
 propcache==0.3.2
 pydantic==2.11.9
 pydantic_core==2.33.2
-pyee==11.1.1
+pyee==13.0.0
 Pygments==2.19.2
 pyppeteer==2.0.0
 pyquery==2.0.1
