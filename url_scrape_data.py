@@ -238,7 +238,7 @@ def scrape_data(source_url):
 
     ############### Remove the unwanted patterns -----> clean the list
 
-    remove_list_patterns = ["follow", "download","logo","skip","news",'subscribe','start','terms','help','reserved',\
+    remove_list_patterns = ["follow", "download","logo","skip","news",'subscribe','start','terms','help','reserved','perseverance',\
                             'into the','exceptional','capabilities','model','committed','with','every','convert','identity','access','message'] # Patterns to match and remove
 
     regex_pattern = "|".join(remove_list_patterns) 
@@ -254,7 +254,7 @@ def scrape_data(source_url):
                              'analyst','security','tech','service','intelligen','individual','learn','message','fact','access',\
                              'partner','ecosy','social','search','compan','equity','customer','director','purpose','gallery','item','fellow',\
                             'stock','team','fund','people','who we','heritage','glance','FAQ','heritage','site map','movement',\
-                            'diabetes','testing','view','global','strength']
+                            'diabetes','testing','view','global','strength','years']
     name_regex_pattern = "|".join(name_remove_list_patterns) 
 
     # 2. Filter the first list using a list comprehension
