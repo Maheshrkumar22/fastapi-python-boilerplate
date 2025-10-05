@@ -73,6 +73,7 @@ def read_item(url_name: str):
 
     # Step 3: Convert to Python list/dict
             data_json = json.loads(cleaned_string)
+            print(f'pipeline json response : {data_json}')
 
             # Step 4: Return as JSONResponse
             return JSONResponse(content=data_json)
