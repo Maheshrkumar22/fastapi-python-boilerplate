@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
 from url_scrape_data import scrape_data
 import json
+import pandas as pd
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -60,5 +61,21 @@ def process(url_name):
 
 @app.get("/api/{url_name:path}")
 def read_item(url_name: str):
-    results_json = process(url_name)
-    return results_json
+    try:
+        df=pd.read_csv('data_pipeline.csv')
+        matched_row = df[df['url'].apply(lambda x: x in str(url_name).strip())]
+
+        if not matched_row.empty:
+            response = matched_row.iloc[0]['response_json']
+            return json.loads(response)
+        else:
+            results_json = process(url_name)
+            return results_json
+        
+    except:    
+        data = [{
+            "Name":"Data Not Found",
+            "Designation":"Bot been blocked",
+            "img url":None
+            }]
+        return json.loads(data)

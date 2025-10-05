@@ -37,6 +37,6 @@ services:
         libx11-xcb1 \
         libgtk-3-0
     buildCommand: |
-      pip install --no-cache-dir -r requirements.txt
-      playwright install chromium --with-deps
+      pip install -r requirements.txt
+      playwright install chromium 
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --no-reload

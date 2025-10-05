@@ -96,10 +96,11 @@ def scrape_data(source_url):
 
 
         #loop = asyncio.get_event_loop()
+        try:
 
-        soup,status_code = scrape_page_dynamic(source_url)       # await instead of asyncio.run
+            soup,status_code = scrape_page_dynamic(source_url)       # await instead of asyncio.run
         
-        if(status_code!= 200):
+        except:
             data = [{
             "Name":"Data Not Found",
             "Designation":"Bot been blocked",
@@ -355,7 +356,7 @@ def scrape_data(source_url):
     full_url_flag = False 
     if(((str(df['img url'][1])[:8]) or (str(df['img url'][0])[:8]) or (str(df['img url'][-1])[:8])) == 'https://'):
         full_url_flag = True
-        
+
     ######append stripped url if direct link is not found
     stripped_url = source_url[:source_url.find('.com') + len('.com')]
 
