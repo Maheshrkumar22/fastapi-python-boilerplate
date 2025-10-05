@@ -58,12 +58,12 @@ def scrape_data(source_url):
     # Run the async function
         soup,response.status_code = asyncio.run( scrape_page(source_url))
         if(response.status_code!= 200):
-            data = {{
+            data = [{
             "Name":"Data Not Found",
             "Designation":"Bot been blocked",
             "img url":None
-            }}
-            return jsonify(data)
+            }]
+            return json.dumps(data)
 
     ############# scrape and save relevant tags
     h1 = [str(x.get_text().strip()) for x in soup.find_all(['h1'])]
@@ -215,7 +215,7 @@ def scrape_data(source_url):
     name_list = [item for item in name_list if not re.search(r'\d{3,}', item)]
 
     ############## extract if it contains these keywords for designation
-    keywords = ['officer', 'chief', 'chairman','director','ceo','partner','president','founder','cfo','fellow','vp','senior','cto','lead']
+    keywords = ['officer', 'chief', 'chairman','director','ceo','partner','president','founder','cfo','fellow','vp','senior','cto','lead','head']
 
     designation_list = [title for title in designation_list if any(keyword in title.lower() for keyword in keywords)]
 
@@ -242,6 +242,14 @@ def scrape_data(source_url):
 
     # Create the DataFrame, specifying column names
     df = pd.DataFrame(data,columns=['Name','Designation'])
+    if(df.empty):
+        data = [{
+        "Name":"Data Not Found",
+        "Designation":"Bot been blocked",
+        "img url":None
+        }]
+        
+        return json.dumps(data,indent=3)
 
     #############---- create new columns to clean the name and find image url
     df[['First Name', 'Last Name']] = df['Name'].str.split(n=1, expand=True)
