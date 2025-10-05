@@ -5,9 +5,25 @@ import asyncio
 import aiohttp
 import json,re,jsonify 
 import asyncio,itertools
+from playwright.async_api import async_playwright
 
 import requests
 from bs4 import BeautifulSoup
+
+import pandas as pd
+import numpy as np
+from requests_html import AsyncHTMLSession
+import json,re
+import asyncio,itertools
+
+import requests
+from bs4 import BeautifulSoup
+
+import spacy
+
+# Load English model
+nlp = spacy.load("en_core_web_sm")
+
 
 async def scrape_page(url):
     # Initialize session
@@ -39,6 +55,17 @@ async def scrape_page(url):
 
     return soup,response.status_code
 
+async def scrape_page_dynamic(url: str):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url, wait_until="networkidle")
+        html = await page.content()
+        soup = BeautifulSoup(html.html, 'html.parser')
+        await browser.close()
+        return soup, html.status_code
+    
+
 def remove_multiple_chars(text, chars_to_remove):
     for char in chars_to_remove:
         text = text.replace(char, ' ')
@@ -46,7 +73,7 @@ def remove_multiple_chars(text, chars_to_remove):
 
 
 
-def scrape_data(source_url):
+async def scrape_data(source_url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
     response = requests.get(source_url, headers=headers)
 
@@ -56,8 +83,10 @@ def scrape_data(source_url):
 
     if(soup.find_all(["a","p","h1","h2","h3","h4","h5"])==[]):
     # Run the async function
-        soup,response.status_code = asyncio.run( scrape_page(source_url))
-        if(response.status_code!= 200):
+        #soup,response.status_code = asyncio.run( scrape_page(source_url))
+        soup,status_code = await scrape_page_dynamic(url)          # await instead of asyncio.run
+        
+        if(status_code!= 200):
             data = [{
             "Name":"Data Not Found",
             "Designation":"Bot been blocked",
