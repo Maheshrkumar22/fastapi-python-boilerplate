@@ -69,7 +69,14 @@ def read_item(url_name: str):
         if not matched_row.empty:
             response = matched_row.iloc[0]['response_json']
             print(f'pipeline response : {response}')
-            return json.loads(response)
+            cleaned_string = response.encode('utf-8').decode('unicode_escape')
+
+    # Step 3: Convert to Python list/dict
+            data_json = json.loads(cleaned_string)
+
+            # Step 4: Return as JSONResponse
+            return JSONResponse(content=data_json)
+            
         else:
             results_json = process(url_name)
             return results_json
