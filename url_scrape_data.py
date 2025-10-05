@@ -97,7 +97,7 @@ def scrape_data(source_url):
 
         #loop = asyncio.get_event_loop()
 
-        soup,status_code = scrape_page_dynamic(url)       # await instead of asyncio.run
+        soup,status_code = scrape_page_dynamic(source_url)       # await instead of asyncio.run
         
         if(status_code!= 200):
             data = [{
