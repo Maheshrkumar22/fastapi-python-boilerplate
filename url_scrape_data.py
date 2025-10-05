@@ -83,8 +83,8 @@ async def scrape_data(source_url):
 
     if(soup.find_all(["a","p","h1","h2","h3","h4","h5"])==[]):
     # Run the async function
-        #soup,response.status_code = asyncio.run( scrape_page(source_url))
-        soup,status_code = await scrape_page_dynamic(url)          # await instead of asyncio.run
+        soup,status_code = asyncio.run( scrape_page(source_url))
+        #soup,status_code = await scrape_page_dynamic(url)          # await instead of asyncio.run
         
         if(status_code!= 200):
             data = [{
@@ -92,7 +92,7 @@ async def scrape_data(source_url):
             "Designation":"Bot been blocked",
             "img url":None
             }]
-            return json.dumps(data)
+            return data
 
     ############# scrape and save relevant tags
     h1 = [str(x.get_text().strip()) for x in soup.find_all(['h1'])]
