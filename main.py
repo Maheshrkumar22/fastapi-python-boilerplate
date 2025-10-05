@@ -62,7 +62,7 @@ def process(url_name):
 @app.get("/api/{url_name:path}")
 def read_item(url_name: str):
     try:
-        df=pd.read_csv('data_pipeline.csv')
+        df=pd.read_csv('data_pipeline.csv',delimiter=';')
         matched_row = df[df['url'].apply(lambda x: x in str(url_name).strip())]
         print("df loaded")
 
@@ -82,7 +82,8 @@ def read_item(url_name: str):
             results_json = process(url_name)
             return results_json
         
-    except:    
+    except Exception as e:  
+        print(e)  
         data = [{
             "Name":"Data Not Found",
             "Designation":"Bot been blocked",
