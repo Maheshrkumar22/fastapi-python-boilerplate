@@ -239,7 +239,8 @@ def scrape_data(source_url):
     ############### Remove the unwanted patterns -----> clean the list
 
     remove_list_patterns = ["follow", "download","logo","skip","news",'subscribe','start','terms','help','reserved','perseverance',\
-                            'into the','exceptional','capabilities','model','committed','with','every','convert','identity','access','message'] # Patterns to match and remove
+                            'into the','exceptional','capabilities','model','committed','with','every',\
+                                'convert','identity','access','message','include','together','coordination'] # Patterns to match and remove
 
     regex_pattern = "|".join(remove_list_patterns) 
 
@@ -254,7 +255,7 @@ def scrape_data(source_url):
                              'analyst','security','tech','service','intelligen','individual','learn','message','fact','access',\
                              'partner','ecosy','social','search','compan','equity','customer','director','purpose','gallery','item','fellow',\
                             'stock','team','fund','people','who we','heritage','glance','FAQ','heritage','site map','movement',\
-                            'diabetes','testing','view','global','strength','years']
+                            'diabetes','testing','view','global','strength','years','navigation']
     name_regex_pattern = "|".join(name_remove_list_patterns) 
 
     # 2. Filter the first list using a list comprehension
@@ -289,7 +290,7 @@ def scrape_data(source_url):
     #####remove reduntant designation------------
     # Use filter with a lambda function to keep only the first occurrence of each element
     seen = set()
-    designation_list = list(filter(lambda x: x not in seen and not seen.add(x), designation_list))
+    #designation_list = list(filter(lambda x: x not in seen and not seen.add(x), designation_list))
 
     #######creating a dtaframe ------
 
@@ -361,6 +362,8 @@ def scrape_data(source_url):
 
     ######append stripped url if direct link is not found
     stripped_url = source_url[:source_url.find('.com') + len('.com')]
+    if('.org/' in source_url):
+        stripped_url = source_url[:source_url.find('.org') + len('.org')]
 
     if(not full_url_flag):
         df['img url']=stripped_url+df['img url']
