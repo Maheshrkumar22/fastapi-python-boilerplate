@@ -268,7 +268,8 @@ def scrape_data(source_url):
     name_list = [item for item in name_list if not re.search(r'\d{3,}', item)]
 
     ############## extract if it contains these keywords for designation
-    keywords = ['officer', 'chief', 'chairman','director','ceo','partner','president','founder','cfo','fellow','vp','senior','cto','lead','head']
+    keywords = ['officer', 'chief', 'chairman','director','ceo','partner','president','founder','cfo','fellow','vp', \
+                'senior','cto','lead','head','administrator','secretary','commissioner']
 
     designation_list = [title for title in designation_list if any(keyword in title.lower() for keyword in keywords)]
 
