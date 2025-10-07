@@ -236,11 +236,20 @@ def scrape_data(source_url):
 
     name_list = [re.sub(title_pattern, "", name) for name in name_list]
 
+    if('tcs.com' in source_url):
+        all_persons=[]
+        for text in h3:
+            doc = nlp(text)
+            persons = [ent.text.strip() for ent in doc.ents if ent.label_ == "PERSON"]
+            all_persons.extend(persons)
+            name_list=all_persons
+            designation_list=h2
+
     ############### Remove the unwanted patterns -----> clean the list
 
     remove_list_patterns = ["follow", "download","logo","skip","news",'subscribe','start','terms','help','reserved','perseverance',\
                             'into the','exceptional','capabilities','model','committed','with','every',\
-                                'convert','identity','access','message','include','together','coordination'] # Patterns to match and remove
+                            'convert','identity','access','message','include','together','coordination','worldwide','board of directors'] # Patterns to match and remove
 
     regex_pattern = "|".join(remove_list_patterns) 
 
@@ -255,7 +264,7 @@ def scrape_data(source_url):
                              'analyst','security','tech','service','intelligen','individual','learn','message','fact','access',\
                              'partner','ecosy','social','search','compan','equity','customer','director','purpose','gallery','item','fellow',\
                             'stock','team','fund','people','who we','heritage','glance','FAQ','heritage','site map','movement',\
-                            'diabetes','testing','view','global','strength','years','navigation']
+                            'diabetes','testing','view','global','strength','years','navigation','adaptability','limited']
     name_regex_pattern = "|".join(name_remove_list_patterns) 
 
     # 2. Filter the first list using a list comprehension
@@ -291,7 +300,7 @@ def scrape_data(source_url):
     #####remove reduntant designation------------
     # Use filter with a lambda function to keep only the first occurrence of each element
     seen = set()
-    #designation_list = list(filter(lambda x: x not in seen and not seen.add(x), designation_list))
+    name_list = list(filter(lambda x: x not in seen and not seen.add(x), name_list))
 
     #######creating a dtaframe ------
 
