@@ -147,7 +147,7 @@ def scrape_data(source_url):
     include_a_tag_flag=False
 
     text = source_url
-    pattern = r"google|mathco|salesforce|abbott"
+    pattern = r"google|mathco|mahindra"
     include_a_tag_flag=bool(re.findall(pattern, text))
 
     lists = [h1, h2, h3, h4, h5, h6, p, span]
